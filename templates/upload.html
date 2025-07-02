@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>📤 Upload CSV</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="genz-theme">
+  <div class="form-container">
+    <h2>📁 Upload Your Expense CSV</h2>
+    <p>Auto-categorization will handle the rest 😎</p>
+      <p><strong>Note:</strong> Please upload a CSV file with the following columns:</p>
+<ul>
+  <li><code>amount</code> – The amount spent (e.g., 1200)</li>
+  <li><code>date</code> – In YYYY-MM-DD format (e.g., 2025-06-15)</li>
+  <li><code>description</code> – A brief note about the expense (e.g., Uber ride)</li>
+  <li><em>Optional:</em> <code>category</code> – If not provided, it will be auto-categorized</li>
+</ul>
+
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".csv" required>
+      <button type="submit">Upload & Analyze 🚀</button>
+    </form>
+    <p class="redirect-link"><a href="/dashboard">⬅ Back to Dashboard</a></p>
+  </div>
+</body>
+</html>

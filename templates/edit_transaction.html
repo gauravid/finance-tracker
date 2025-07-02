@@ -1,0 +1,23 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Transaction ✏️</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="genz-theme">
+  <div class="form-container">
+    <h2>✏️ Update Your Expense</h2>
+    <form method="POST">
+      <input type="number" step="0.01" name="amount" value="{{ txn.amount }}" required>
+      <input type="text" name="category" value="{{ txn.category }}" required>
+      <input type="date" name="date" value="{{ txn.date }}" required>
+      <input type="text" name="description" value="{{ txn.description }}">
+      <button type="submit">Update 🔄</button>
+    </form>
+    <p class="redirect-link"><a href="/dashboard">⬅ Back to Dashboard</a></p>
+  </div>
+</body>
+</html>

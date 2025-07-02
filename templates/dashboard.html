@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Spendly </title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="genz-theme">
+  <div class="navbar">
+    <h1>💼 Spendly </h1>
+    <div>
+      <a href="/dashboard" class="btn">🏠 Home</a>
+      <a href="/add" class="btn">➕ Add</a>
+      <a href="/upload" class="btn">📤 Upload</a>
+      <a href="/logout" class="btn">🚪 Logout</a>
+    </div>
+  </div>
+
+  <form method="get" action="/dashboard" class="summary-filters">
+    <label for="filter">📊 Show Summary:</label>
+    <select name="filter" onchange="this.form.submit()">
+      <option value="7" {% if selected_filter == '7' %}selected{% endif %}>Last 7 Days</option>
+      <option value="15" {% if selected_filter == '15' %}selected{% endif %}>Last 15 Days</option>
+      <option value="30" {% if selected_filter == '30' or not selected_filter %}selected{% endif %}>All Time</option>
+    </select>
+  </form>
+
+  <div class="dashboard-grid">
+    <div class="summary-box card">
+      <h2>📋 Summary</h2>
+      <p><strong>Transactions:</strong> {{ transactions|length }}</p>
+      <p><strong>Total Spent:</strong> ₹{{ total_spent }}</p>
+    </div>
+
+    <div class="chart-box card">
+      <h2>📊 Spend by Category</h2>
+      <canvas id="pieChart" width="200" height="200"></canvas>
+    </div>
+
+    <div class="transactions-box card">
+      <h2>🧾 Recent Transactions</h2>
+      <ul class="transaction-list">
+        {% for txn in transactions[-5:] %}
+        <li class="txn-row">
+          <div>
+            <span>{{ txn.date }} - <strong>{{ txn.category }}</strong></span><br>
+            <small>{{ txn.description }}</small>
+          </div>
+          <div>
+            ₹{{ txn.amount }}<br>
+            <a href="/edit/{{ txn.id }}">✏️</a> | <a href="/delete/{{ txn.id }}">🗑️</a>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const chartData = {{ chart_data | tojson }};
+    const ctx = document.getElementById("pieChart").getContext("2d");
+    new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: Object.keys(chartData),
+        datasets: [{
+          data: Object.values(chartData),
+          backgroundColor: ["#ff7675", "#74b9ff", "#ffeaa7", "#55efc4", "#a29bfe"]
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
